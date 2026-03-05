@@ -10,6 +10,8 @@ const menuItems = [
   { id: "risks", label: "Risks", icon: "⚠️" },
   { id: "inventory", label: "Inventory", icon: "📦" },
   { id: "reports", label: "Reports", icon: "📈" },
+  { id: "safety", label: "Safety", icon: "🛡️" },
+  { id: "analytics", label: "Analytics", icon: "📊" },
 ];
 
 export default function Sidebar({ activeModule, setActiveModule, collapsed, setCollapsed }) {

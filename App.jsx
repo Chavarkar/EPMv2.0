@@ -9,6 +9,8 @@ import DocumentManagement from "./pages/DocumentManagement";
 import ProcurementTracker from "./pages/ProcurementTracker";
 import RiskManagement from "./pages/RiskManagement";
 import InventoryManagement from "./pages/InventoryManagement";
+import SafetyManagement from "./pages/SafetyManagement";
+import Analytics from "./pages/Analytics";
 import Reports from "./pages/Reports";
 
 export default function App() {
@@ -26,7 +28,9 @@ export default function App() {
       case "procurement": return <ProcurementTracker />;
       case "risks": return <RiskManagement />;
       case "inventory": return <InventoryManagement />;
+      case "safety": return <SafetyManagement />;
       case "reports": return <Reports />;
+      case "analytics": return <Analytics />;
       default: return <Dashboard setActiveModule={setActiveModule} />;
     }
   };

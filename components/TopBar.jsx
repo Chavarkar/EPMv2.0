@@ -1,13 +1,13 @@
 const moduleLabels = {
-  dashboard: "Enterprise Dashboard",
-  projects: "Project Management",
+  dashboard: "Dashboard",
+  projects: "Projects",
   budget: "Budget Tracking",
   resources: "Resource Management",
-  documents: "Document Management",
-  procurement: "Procurement Tracker",
+  documents: "Documents",
+  procurement: "Procurement",
   risks: "Risk Management",
-  inventory: "Inventory Management",
-  reports: "Reports & Analytics",
+  inventory: "Inventory",
+  reports: "Reports",
 };
 
 export default function TopBar({ activeModule }) {
@@ -15,30 +15,35 @@ export default function TopBar({ activeModule }) {
   const dateStr = now.toLocaleDateString("en-US", { weekday: "short", year: "numeric", month: "short", day: "numeric" });
 
   return (
-    <header className="flex items-center justify-between px-6 py-3 bg-[#0d0d0d] border-b border-[#1f1f1f]" style={{ minHeight: 56 }}>
+    <header className="flex items-center justify-between px-8 py-4 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 shadow-sm">
       <div className="flex items-center gap-3">
-        <div className="text-[#E53E3E] text-xs font-bold tracking-widest" style={{ fontFamily: "'Courier New', monospace" }}>
-          MOUNT MERU GROUP
-        </div>
-        <span className="text-[#222]">|</span>
-        <h1 className="text-white text-sm font-bold tracking-wider" style={{ fontFamily: "'Courier New', monospace" }}>
-          {moduleLabels[activeModule] || "Protrak"}
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">
+          {moduleLabels[activeModule] || "Dashboard"}
         </h1>
       </div>
 
-      <div className="flex items-center gap-4">
-        <div className="text-[#444] text-[11px]" style={{ fontFamily: "'Courier New', monospace" }}>{dateStr}</div>
+      <div className="flex items-center gap-6">
+        <div className="text-slate-600 dark:text-slate-400 text-sm">
+          {dateStr}
+        </div>
 
-        <button className="relative text-[#666] hover:text-white transition-colors">
-          <span className="text-lg">🔔</span>
-          <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-[#E53E3E] rounded-full text-[8px] flex items-center justify-center text-white font-bold">4</span>
+        <button className="relative p-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-50 transition-colors">
+          <span className="text-xl">🔔</span>
+          <span className="absolute top-0 right-0 w-5 h-5 bg-red-600 text-white text-xs flex items-center justify-center rounded-full font-bold">4</span>
         </button>
 
-        <button className="text-[#666] hover:text-white transition-colors text-lg">⚙</button>
+        <button className="p-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-50 transition-colors">
+          <span className="text-xl">⚙️</span>
+        </button>
 
-        <div className="flex items-center gap-2 bg-[#111] border border-[#1f1f1f] rounded px-3 py-1">
-          <div className="w-6 h-6 rounded-full bg-[#E53E3E] flex items-center justify-center text-white font-bold text-[10px]">PM</div>
-          <span className="text-[#888] text-[11px]" style={{ fontFamily: "'Courier New', monospace" }}>admin@meru.com</span>
+        <div className="flex items-center gap-3 pl-6 border-l border-slate-200 dark:border-slate-700">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-white font-bold text-sm shadow-md">
+            JD
+          </div>
+          <div className="hidden sm:block">
+            <p className="font-medium text-slate-900 dark:text-slate-50 text-sm">John Doe</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Project Manager</p>
+          </div>
         </div>
       </div>
     </header>

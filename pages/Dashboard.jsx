@@ -1,21 +1,18 @@
-import { useState } from "react";
-import { Card, StatCard, Badge, Progress, Btn } from "../components/UI";
+import { Card, StatCard, Badge, Btn, SectionTitle, Table } from "../components/UI";
 
-const MeruLogo = () => (
-  <svg width="48" height="48" viewBox="0 0 60 60" fill="none">
-    <rect width="60" height="60" rx="8" fill="#111" />
-    <path d="M8 48 L8 12 L22 32 L30 18 L38 32 L52 12 L52 48" stroke="#E53E3E" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-    <path d="M8 48 L8 44 L52 44 L52 48" fill="#F6C90E"/>
-    <circle cx="30" cy="18" r="3" fill="#F6C90E"/>
-  </svg>
-);
+const stats = [
+  { label: "Active Projects", value: "5", trend: 12, icon: "📊" },
+  { label: "Total Budget", value: "$17.5M", trend: -2, icon: "💰" },
+  { label: "Team Members", value: "43", trend: 8, icon: "👥" },
+  { label: "Completion Rate", value: "67%", trend: 5, icon: "✅" },
+];
 
 const recentProjects = [
-  { name: "MMG Tower A – Dar es Salaam", id: "TZ-MMG-2024-001", status: "In-Progress", progress: 67, budget: "$4.2M", risk: "Medium" },
-  { name: "MMG Logistics Hub – Kampala", id: "UG-MMG-2024-002", status: "In-Progress", progress: 34, budget: "$2.8M", risk: "Low" },
-  { name: "MMG Warehouse – Nairobi", id: "KE-MMG-2024-003", status: "Delayed", progress: 51, budget: "$1.9M", risk: "High" },
-  { name: "MMG Office Complex – Kigali", id: "RW-MMG-2025-001", status: "Active", progress: 12, budget: "$3.5M", risk: "Low" },
-  { name: "MMG Plant – Lusaka", id: "ZM-MMG-2025-002", status: "Active", progress: 8, budget: "$5.1M", risk: "Medium" },
+  { name: "MMG Tower A – Dar es Salaam", id: "TZ-MMG-2024-001", status: "In-Progress", progress: 67, budget: "$4.2M" },
+  { name: "MMG Logistics Hub – Kampala", id: "UG-MMG-2024-002", status: "In-Progress", progress: 34, budget: "$2.8M" },
+  { name: "MMG Warehouse – Nairobi", id: "KE-MMG-2024-003", status: "Delayed", progress: 51, budget: "$1.9M" },
+  { name: "MMG Office Complex – Kigali", id: "RW-MMG-2025-001", status: "Active", progress: 12, budget: "$3.5M" },
+  { name: "MMG Plant – Lusaka", id: "ZM-MMG-2025-002", status: "Active", progress: 8, budget: "$5.1M" },
 ];
 
 const alerts = [
@@ -26,129 +23,147 @@ const alerts = [
 ];
 
 const moduleCards = [
-  { id: "projects", icon: "◈", label: "Project Management", desc: "Gantt, scheduling, tasks, DPR", stat: "5 Active", color: "#E53E3E" },
-  { id: "budget", icon: "◉", label: "Budget Tracking", desc: "Committed, actual vs plan", stat: "$17.5M", color: "#F6C90E" },
-  { id: "resources", icon: "◎", label: "Resource Management", desc: "Calendars, allocation, scheduling", stat: "43 Resources", color: "#E53E3E" },
-  { id: "documents", icon: "◧", label: "Document Management", desc: "Drawings, change requests, center", stat: "128 Docs", color: "#F6C90E" },
-  { id: "procurement", icon: "◐", label: "Procurement Tracker", desc: "MR lifecycle, PO, shipment", stat: "17 Active MRs", color: "#E53E3E" },
-  { id: "risks", icon: "◬", label: "Risk Management", desc: "Identify, analyze, mitigate risks", stat: "8 Open Risks", color: "#F6C90E" },
-  { id: "inventory", icon: "◫", label: "Inventory Management", desc: "GRN, MIR, STS, reconciliation", stat: "4 Inventories", color: "#E53E3E" },
-  { id: "reports", icon: "◈", label: "Reports & Analytics", desc: "Comprehensive cross-module reports", stat: "12 Reports", color: "#F6C90E" },
+  { id: "projects", icon: "📋", label: "Projects", desc: "Manage timelines & tasks", stat: "5 Active" },
+  { id: "budget", icon: "💰", label: "Budget", desc: "Track costs & spending", stat: "$17.5M" },
+  { id: "resources", icon: "👥", label: "Resources", desc: "Allocate team members", stat: "43 Users" },
+  { id: "documents", icon: "📄", label: "Documents", desc: "Store & organize files", stat: "128 Files" },
+  { id: "procurement", icon: "🛒", label: "Procurement", desc: "Purchase orders & tracking", stat: "17 MRs" },
+  { id: "risks", icon: "⚠️", label: "Risks", desc: "Identify & mitigate issues", stat: "8 Open" },
+  { id: "inventory", icon: "📦", label: "Inventory", desc: "Stock & supply management", stat: "4 Sites" },
+  { id: "reports", icon: "📈", label: "Reports", desc: "Analytics & dashboards", stat: "12 Reports" },
 ];
 
 export default function Dashboard({ setActiveModule }) {
-  return (
-    <div className="p-6 space-y-6">
+  const getAlertColor = (type) => {
+    switch (type) {
+      case "critical": return "bg-red-50 dark:bg-red-950 border-red-200 dark:border-red-800";
+      case "warning": return "bg-amber-50 dark:bg-amber-950 border-amber-200 dark:border-amber-800";
+      case "info": return "bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800";
+      default: return "bg-slate-50 dark:bg-slate-800";
+    }
+  };
 
-      {/* Hero Banner */}
-      <div className="bg-[#0d0d0d] border border-[#1f1f1f] rounded-lg p-6 flex items-center justify-between" style={{ background: "linear-gradient(135deg, #0d0d0d 0%, #1a0000 100%)" }}>
-        <div className="flex items-center gap-5">
-          <MeruLogo />
-          <div>
-            <div className="text-[#E53E3E] text-xs font-bold tracking-[0.4em] uppercase mb-1" style={{ fontFamily: "'Courier New', monospace" }}>
-              MOUNT MERU GROUP
-            </div>
-            <div className="text-white text-2xl font-black tracking-tight">PROTRAK Enterprise</div>
-            <div className="text-[#666] text-xs mt-1" style={{ fontFamily: "'Courier New', monospace" }}>
-              Construction Management Platform · FY 2025
-            </div>
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "In-Progress": return "primary";
+      case "Active": return "success";
+      case "Delayed": return "danger";
+      default: return "default";
+    }
+  };
+
+  return (
+    <div className="p-8 space-y-8 max-w-7xl mx-auto">
+      {/* Welcome Section */}
+      <div className="space-y-2">
+        <h1 className="text-4xl font-bold text-slate-900 dark:text-slate-50">Welcome back</h1>
+        <p className="text-slate-600 dark:text-slate-400">Here's an overview of your enterprise projects</p>
+      </div>
+
+      {/* Key Metrics */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {stats.map((stat, idx) => (
+          <StatCard key={idx} {...stat} />
+        ))}
+      </div>
+
+      {/* Alerts Section */}
+      {alerts.length > 0 && (
+        <div className="space-y-4">
+          <SectionTitle>Active Alerts</SectionTitle>
+          <div className="space-y-3">
+            {alerts.map((alert, idx) => (
+              <div key={idx} className={`border rounded-lg p-4 flex items-start gap-4 ${getAlertColor(alert.type)}`}>
+                <div className="text-2xl mt-1">
+                  {alert.type === "critical" && "🔴"}
+                  {alert.type === "warning" && "🟡"}
+                  {alert.type === "info" && "🔵"}
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-slate-900 dark:text-slate-100">{alert.msg}</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{alert.time}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-        <div className="text-right hidden md:block">
-          <div className="text-[#F6C90E] text-xs tracking-widest uppercase mb-1" style={{ fontFamily: "'Courier New', monospace" }}>Portfolio Overview</div>
-          <div className="text-white text-3xl font-black">5</div>
-          <div className="text-[#666] text-xs">Active Projects</div>
+      )}
+
+      {/* Recent Projects */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <SectionTitle>Recent Projects</SectionTitle>
+          <Btn variant="primary" onClick={() => setActiveModule("projects")}>
+            View All Projects
+          </Btn>
         </div>
-      </div>
-
-      {/* KPI Row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <StatCard label="Total Budget" value="$17.5M" sub="Across all projects" accent="red" />
-        <StatCard label="Committed" value="$11.2M" sub="64% of total budget" accent="yellow" />
-        <StatCard label="Actual Spent" value="$8.9M" sub="51% expenditure rate" accent="white" />
-        <StatCard label="Open Risks" value="8" sub="3 High · 4 Medium · 1 Low" accent="red" />
-      </div>
-
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <StatCard label="Active MRs" value="17" sub="3 awaiting approval" accent="yellow" />
-        <StatCard label="Open Change Req." value="6" sub="2 pending HOD review" accent="red" />
-        <StatCard label="Resources" value="43" sub="2 over-allocated" accent="white" />
-        <StatCard label="Drawings Released" value="89" sub="12 in draft state" accent="yellow" />
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Active Projects */}
-        <div className="lg:col-span-2">
-          <Card className="p-5">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-white font-bold text-xs tracking-widest uppercase" style={{ fontFamily: "'Courier New', monospace" }}>
-                Active Projects
-              </h2>
-              <Btn variant="ghost" small onClick={() => setActiveModule("projects")}>View All →</Btn>
-            </div>
-            <div className="space-y-4">
-              {recentProjects.map((p) => (
-                <div key={p.id} className="border border-[#1a1a1a] rounded p-3 hover:border-[#E53E3E]/30 transition-colors cursor-pointer">
-                  <div className="flex items-start justify-between mb-2">
-                    <div>
-                      <div className="text-white text-sm font-semibold">{p.name}</div>
-                      <div className="text-[#555] text-[10px] mt-0.5" style={{ fontFamily: "'Courier New', monospace" }}>{p.id}</div>
-                    </div>
-                    <div className="flex gap-2">
-                      <Badge status={p.status} />
-                      <Badge status={p.risk} />
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="flex-1">
-                      <Progress value={p.progress} color={p.status === "Delayed" ? "red" : p.progress > 50 ? "yellow" : "white"} />
-                    </div>
-                    <div className="text-[#555] text-[11px]" style={{ fontFamily: "'Courier New', monospace" }}>{p.budget}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </Card>
-        </div>
-
-        {/* Alerts */}
-        <div>
-          <Card className="p-5 h-full">
-            <h2 className="text-white font-bold text-xs tracking-widest uppercase mb-4" style={{ fontFamily: "'Courier New', monospace" }}>
-              Alerts & Notifications
-            </h2>
-            <div className="space-y-3">
-              {alerts.map((a, i) => (
-                <div key={i} className={`p-3 rounded border-l-2 ${
-                  a.type === "critical" ? "border-[#E53E3E] bg-[#1a0000]" :
-                  a.type === "warning" ? "border-[#F6C90E] bg-[#1a1a00]" :
-                  "border-[#333] bg-[#0a0a0a]"
-                }`}>
-                  <div className="text-white text-xs">{a.msg}</div>
-                  <div className="text-[#555] text-[10px] mt-1" style={{ fontFamily: "'Courier New', monospace" }}>{a.time}</div>
-                </div>
-              ))}
-            </div>
-          </Card>
-        </div>
+        <Card>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-slate-200 dark:border-slate-700">
+                  <th className="px-6 py-4 text-left font-semibold text-slate-700 dark:text-slate-300">Project</th>
+                  <th className="px-6 py-4 text-left font-semibold text-slate-700 dark:text-slate-300">ID</th>
+                  <th className="px-6 py-4 text-left font-semibold text-slate-700 dark:text-slate-300">Status</th>
+                  <th className="px-6 py-4 text-left font-semibold text-slate-700 dark:text-slate-300">Progress</th>
+                  <th className="px-6 py-4 text-left font-semibold text-slate-700 dark:text-slate-300">Budget</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recentProjects.map((project, idx) => (
+                  <tr key={idx} className="border-b border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                    <td className="px-6 py-4 font-medium text-slate-900 dark:text-slate-100">{project.name}</td>
+                    <td className="px-6 py-4 text-slate-600 dark:text-slate-400 font-mono text-sm">{project.id}</td>
+                    <td className="px-6 py-4">
+                      <Badge variant={getStatusColor(project.status)}>
+                        {project.status}
+                      </Badge>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        <div className="flex-1 h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden max-w-xs">
+                          <div
+                            className="h-full bg-gradient-to-r from-blue-500 to-cyan-500"
+                            style={{ width: `${project.progress}%` }}
+                          />
+                        </div>
+                        <span className="text-sm font-medium text-slate-700 dark:text-slate-300 w-10 text-right">{project.progress}%</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-slate-900 dark:text-slate-100 font-medium">{project.budget}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Card>
       </div>
 
       {/* Module Cards */}
-      <div>
-        <h2 className="text-white font-bold text-xs tracking-widest uppercase mb-4" style={{ fontFamily: "'Courier New', monospace" }}>
-          All Modules
-        </h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {moduleCards.map((m) => (
+      <div className="space-y-4">
+        <SectionTitle>Quick Access</SectionTitle>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {moduleCards.map((module) => (
             <button
-              key={m.id}
-              onClick={() => setActiveModule(m.id)}
-              className="bg-[#111] border border-[#1f1f1f] rounded-lg p-4 text-left hover:border-[#E53E3E]/50 hover:bg-[#141414] transition-all group"
+              key={module.id}
+              onClick={() => setActiveModule(module.id)}
+              className="text-left group"
             >
-              <div className="text-2xl mb-3 group-hover:scale-110 transition-transform" style={{ color: m.color }}>{m.icon}</div>
-              <div className="text-white text-xs font-bold mb-1">{m.label}</div>
-              <div className="text-[#555] text-[10px] mb-3">{m.desc}</div>
-              <div className="text-[11px] font-bold" style={{ color: m.color, fontFamily: "'Courier New', monospace" }}>{m.stat}</div>
+              <Card className="h-full hover:shadow-lg transition-all cursor-pointer">
+                <div className="space-y-4">
+                  <div className="flex items-start justify-between">
+                    <span className="text-4xl">{module.icon}</span>
+                    <span className="text-3xl opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-slate-900 dark:text-slate-50">{module.label}</h3>
+                    <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">{module.desc}</p>
+                  </div>
+                  <div className="pt-4 border-t border-slate-200 dark:border-slate-700">
+                    <p className="font-bold text-blue-600 dark:text-blue-400">{module.stat}</p>
+                  </div>
+                </div>
+              </Card>
             </button>
           ))}
         </div>

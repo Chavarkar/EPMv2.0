@@ -14,6 +14,7 @@ import Reports from "./pages/Reports";
 export default function App() {
   const [activeModule, setActiveModule] = useState("dashboard");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [isDarkMode] = useState(false);
 
   const renderPage = () => {
     switch (activeModule) {
@@ -31,16 +32,16 @@ export default function App() {
   };
 
   return (
-    <div className="flex h-screen bg-black text-white font-sans overflow-hidden">
+    <div className={`flex h-screen overflow-hidden ${isDarkMode ? "dark" : ""}`}>
       <Sidebar
         activeModule={activeModule}
         setActiveModule={setActiveModule}
         collapsed={sidebarCollapsed}
         setCollapsed={setSidebarCollapsed}
       />
-      <div className="flex flex-col flex-1 overflow-hidden">
-        <TopBar activeModule={activeModule} collapsed={sidebarCollapsed} />
-        <main className="flex-1 overflow-auto bg-[#0a0a0a]">
+      <div className="flex flex-col flex-1 overflow-hidden bg-slate-50 dark:bg-slate-950">
+        <TopBar activeModule={activeModule} />
+        <main className="flex-1 overflow-auto">
           {renderPage()}
         </main>
       </div>

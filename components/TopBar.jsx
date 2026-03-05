@@ -8,6 +8,8 @@ const moduleLabels = {
   risks: "Risk Management",
   inventory: "Inventory",
   reports: "Reports",
+  safety: "Safety Management",
+  analytics: "Analytics & Reporting",
 };
 
 export default function TopBar({ activeModule }) {

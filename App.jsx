@@ -16,7 +16,6 @@ import Reports from "./pages/Reports";
 export default function App() {
   const [activeModule, setActiveModule] = useState("dashboard");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [isDarkMode] = useState(false);
 
   const renderPage = () => {
     switch (activeModule) {
@@ -36,7 +35,7 @@ export default function App() {
   };
 
   return (
-    <div className={`flex h-screen overflow-hidden ${isDarkMode ? "dark" : ""}`}>
+    <div className="flex h-screen overflow-hidden">
       <Sidebar
         activeModule={activeModule}
         setActiveModule={setActiveModule}

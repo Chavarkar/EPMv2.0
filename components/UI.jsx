@@ -90,6 +90,72 @@ export function Input({ placeholder = "", value = "", onChange = () => {}, type 
   );
 }
 
+export function Select({ value = "", onChange = () => {}, options = [], className = "" }) {
+  return (
+    <select
+      value={value}
+      onChange={onChange}
+      className={`w-full px-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${className}`}
+    >
+      <option value="">Select an option</option>
+      {Array.isArray(options) && options.map((opt, idx) => {
+        const optValue = typeof opt === 'string' ? opt : opt.value;
+        const optLabel = typeof opt === 'string' ? opt : opt.label;
+        return <option key={idx} value={optValue}>{optLabel}</option>;
+      })}
+    </select>
+  );
+}
+
+export function Tab({ tabs = [], active = "", setActive = () => {} }) {
+  return (
+    <div className="flex gap-2 mb-6 border-b border-slate-200 dark:border-slate-700">
+      {tabs.map((tab) => (
+        <button
+          key={tab}
+          onClick={() => setActive(tab)}
+          className={`px-4 py-3 font-medium text-sm border-b-2 transition-colors ${
+            active === tab
+              ? "border-blue-600 text-blue-600 dark:text-blue-400"
+              : "border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
+          }`}
+        >
+          {tab}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+export function FormField({ label, children }) {
+  return (
+    <div className="mb-4">
+      <label className="block text-sm font-medium text-slate-900 dark:text-slate-100 mb-2">
+        {label}
+      </label>
+      {children}
+    </div>
+  );
+}
+
+export function Modal({ title, children, onClose }) {
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white dark:bg-slate-900 rounded-lg shadow-lg w-full max-w-md mx-4">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-700">
+          <h2 className="text-lg font-bold text-slate-900 dark:text-slate-50">{title}</h2>
+          <button onClick={onClose} className="text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
+            ✕
+          </button>
+        </div>
+        <div className="px-6 py-4 space-y-4">
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function Table({ headers, rows, className = "" }) {
   return (
     <div className={`overflow-x-auto ${className}`}>

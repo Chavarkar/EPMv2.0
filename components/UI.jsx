@@ -97,7 +97,7 @@ export function Select({ value = "", onChange = () => {}, options = [], classNam
       onChange={onChange}
       className={`w-full px-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${className}`}
     >
-      <option value="">Select an option</option>
+      <option value="">Select...</option>
       {Array.isArray(options) && options.map((opt, idx) => {
         const optValue = typeof opt === 'string' ? opt : opt.value;
         const optLabel = typeof opt === 'string' ? opt : opt.label;
@@ -109,15 +109,15 @@ export function Select({ value = "", onChange = () => {}, options = [], classNam
 
 export function Tab({ tabs = [], active = "", setActive = () => {} }) {
   return (
-    <div className="flex gap-2 mb-6 border-b border-slate-200 dark:border-slate-700">
+    <div className="flex gap-0 border-b border-slate-200 dark:border-slate-700 overflow-x-auto mb-6">
       {tabs.map((tab) => (
         <button
           key={tab}
           onClick={() => setActive(tab)}
-          className={`px-4 py-3 font-medium text-sm border-b-2 transition-colors ${
+          className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
             active === tab
-              ? "border-blue-600 text-blue-600 dark:text-blue-400"
-              : "border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
+              ? "text-blue-600 dark:text-blue-400 border-blue-600 dark:border-blue-400"
+              : "text-slate-600 dark:text-slate-400 border-transparent hover:text-slate-900 dark:hover:text-slate-300"
           }`}
         >
           {tab}
@@ -127,30 +127,29 @@ export function Tab({ tabs = [], active = "", setActive = () => {} }) {
   );
 }
 
-export function FormField({ label, children }) {
+export function FormField({ label, children, error = null }) {
   return (
-    <div className="mb-4">
-      <label className="block text-sm font-medium text-slate-900 dark:text-slate-100 mb-2">
+    <div className="mb-5">
+      <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
         {label}
       </label>
       {children}
+      {error && <p className="text-red-600 text-xs mt-1">{error}</p>}
     </div>
   );
 }
 
-export function Modal({ title, children, onClose }) {
+export function Modal({ title, onClose, children }) {
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white dark:bg-slate-900 rounded-lg shadow-lg w-full max-w-md mx-4">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl w-full max-w-lg max-h-[80vh] overflow-y-auto shadow-xl">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-700">
-          <h2 className="text-lg font-bold text-slate-900 dark:text-slate-50">{title}</h2>
-          <button onClick={onClose} className="text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
-            ✕
-          </button>
+          <h3 className="text-slate-900 dark:text-slate-100 font-semibold text-lg">
+            {title}
+          </h3>
+          <button onClick={onClose} className="text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 text-xl transition-colors">✕</button>
         </div>
-        <div className="px-6 py-4 space-y-4">
-          {children}
-        </div>
+        <div className="p-6">{children}</div>
       </div>
     </div>
   );
@@ -181,71 +180,6 @@ export function Table({ headers, rows, className = "" }) {
           ))}
         </tbody>
       </table>
-    </div>
-  );
-}
-
-export function Select({ value = "", onChange = () => {}, options = [], className = "" }) {
-  return (
-    <select
-      value={value}
-      onChange={onChange}
-      className={`w-full px-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${className}`}
-    >
-      <option value="">Select...</option>
-      {options.map((option, idx) => (
-        <option key={idx} value={option.value || option}>
-          {option.label || option}
-        </option>
-      ))}
-    </select>
-  );
-}
-
-export function Tab({ tabs, active, setActive }) {
-  return (
-    <div className="flex gap-0 border-b border-slate-200 dark:border-slate-700 overflow-x-auto">
-      {tabs.map((tab) => (
-        <button
-          key={tab}
-          onClick={() => setActive(tab)}
-          className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors
-            ${active === tab
-              ? "text-blue-600 dark:text-blue-400 border-blue-600 dark:border-blue-400"
-              : "text-slate-600 dark:text-slate-400 border-transparent hover:text-slate-900 dark:hover:text-slate-300"
-            }`}
-        >
-          {tab}
-        </button>
-      ))}
-    </div>
-  );
-}
-
-export function Modal({ title, onClose, children }) {
-  return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl w-full max-w-lg max-h-[80vh] overflow-y-auto shadow-xl">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-700">
-          <h3 className="text-slate-900 dark:text-slate-100 font-semibold text-lg">
-            {title}
-          </h3>
-          <button onClick={onClose} className="text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 text-xl transition-colors">✕</button>
-        </div>
-        <div className="p-6">{children}</div>
-      </div>
-    </div>
-  );
-}
-
-export function FormField({ label, children, error = null }) {
-  return (
-    <div className="mb-5">
-      <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-        {label}
-      </label>
-      {children}
-      {error && <p className="text-red-600 text-xs mt-1">{error}</p>}
     </div>
   );
 }
